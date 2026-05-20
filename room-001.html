@@ -395,38 +395,8 @@
     </div>
     
     <script>
-        function confirmarNoLimpieza() {
-            const button = document.querySelector('.button');
-            button.disabled = true;
-            button.textContent = 'Wird registriert...';
-            
-            const roomNumber = '001';
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            const dateString = tomorrow.toLocaleDateString('de-DE', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            });
-            
-            const data = {
-                habitacion: roomNumber,
-                fecha: tomorrow.toISOString().split('T')[0],
-                hora: new Date().toTimeString().split(' ')[0],
-                estado: 'Keine Reinigung',
-                timestamp: new Date().toLocaleString('de-DE')
-            };
-            
-            setTimeout(() => {
-                document.getElementById('contentArea').style.display = 'none';
-                document.getElementById('voucherArea').style.display = 'block';
-                document.getElementById('voucherDate').textContent = dateString;
-                document.getElementById('footerNote').style.opacity = '0.5';
-                
-                console.log('Daten registriert:', data);
-            }, 800);
+        async function confirmarNoLimpieza() { const button = document.querySelector('.button'); button.disabled = true; button.textContent = 'Wird registriert...'; const roomNumber = 'XXX'; // Ersetze XXX mit der Zimmernummer const today = new Date(); const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1); const data = { habitacion: roomNumber, fecha: tomorrow.toISOString().split('T')[0], hora: new Date().toTimeString().split(' ')[0], estado: 'Keine Reinigung', timestamp: new Date().toLocaleString('de-DE') }; // ERSETZE DIESE URL MIT DEINER POWER AUTOMATE URL const powerAutomateUrl = 'https://prod-XX.westeurope.logic.azure.com:443/workflows/...'; try { await fetch(powerAutomateUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); setTimeout(() => { document.getElementById('contentArea').style.display = 'none'; document.getElementById('voucherArea').style.display = 'block'; document.getElementById('voucherDate').textContent = tomorrow.toLocaleDateString('de-DE', { year: 'numeric', month: '2-digit', day: '2-digit' }); document.getElementById('footerNote').style.opacity = '0.5'; }, 800); } catch (error) { console.error('Fehler:', error); button.disabled = false; button.textContent = 'Bestätigen: Morgen nicht reinigen'; alert('Fehler bei der Registrierung. Bitte versuche es erneut.'); } }
+                                                          }, 800);
         }
     </script>
 </body>
