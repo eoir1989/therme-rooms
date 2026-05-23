@@ -6,6 +6,7 @@
     <title>Room Cleaning Preference</title>
     <link href="https://fonts.googleapis.com/css2?family=Metropolis:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        @import url('https://cdn.jsdelivr.net/npm/@fontsource/metropolis@4.5.0/index.css');
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -394,8 +395,9 @@
                 Bitte geben Sie Ihr Abreisedatum ein, um zu prüfen, ob Sie die Zimmerreinigung abbestellen können.
             </div>
             <div class="form-group">
-                <label id="checkoutLabel">Abreisedatum | Check-out date</label>
+                <label id="checkoutLabel">Abreisedatum</label>
                 <input type="date" id="checkoutDate">
+                <p id="checkoutWarning" style="font-size: 11px; color: #999; margin-top: 8px; line-height: 1.5;"></p>
             </div>
             <div class="not-possible" id="notPossible">
                 ⚠️ Da Sie morgen abreisen, ist es leider nicht möglich, die Zimmerreinigung abzubestellen. Wir wünschen Ihnen eine gute Reise!
@@ -474,9 +476,11 @@
         const textsDE = {
             roomLabel: 'Zimmer', mainTitle: 'Reinigung abbestellen', mainSubtitle: 'Getränk genießen',
             checkoutInfo: 'Bitte geben Sie Ihr Abreisedatum ein, um zu prüfen, ob Sie die Zimmerreinigung abbestellen können.',
-            checkoutLabel: 'Abreisedatum | Check-out date',
+            checkoutLabel: 'Abreisedatum',
             checkoutBtn: 'Weiter',
+            checkoutWarning: 'Bitte geben Sie Ihr korrektes Abreisedatum an. Bei falschen Angaben behalten wir uns vor, das Freigetränk in Rechnung zu stellen.',
             notPossible: '⚠️ Da Sie morgen abreisen, ist es leider nicht möglich, die Zimmerreinigung abzubestellen. Wir wünschen Ihnen eine gute Reise!',
+            toEarly: '⏰ Es ist noch vor 11:00 Uhr. Bitte wenden Sie sich für Änderungen an heute an die Rezeption.',
             introText: 'Verzichten Sie auf die Zimmerreinigung und leisten Sie gemeinsam mit uns einen kleinen Beitrag zum Umweltschutz. Als Dankeschön laden wir Sie auf ein Getränk in unsere Hotelbar ein.',
             benefitsTitle: 'Vorteile | Benefits',
             benefit1: 'Schonender Umgang mit Wasser, Energie und Reinigungsmitteln',
@@ -506,9 +510,11 @@
         const textsEN = {
             roomLabel: 'Room', mainTitle: 'Cancel room cleaning', mainSubtitle: 'Enjoy a drink',
             checkoutInfo: 'Please enter your check-out date to see if you can cancel room cleaning.',
-            checkoutLabel: 'Check-out date | Abreisedatum',
+            checkoutLabel: 'Check-out date',
             checkoutBtn: 'Continue',
+            checkoutWarning: 'Please enter your correct check-out date. Incorrect information may result in the complimentary drink being charged to your room.',
             notPossible: '⚠️ Since you are checking out tomorrow, it is unfortunately not possible to cancel room cleaning. We wish you a pleasant journey!',
+            toEarly: '⏰ It is before 11:00 AM. For changes affecting today, please contact reception.',
             introText: 'Skip room cleaning and help us make a small contribution to protecting the environment. As a thank you, we\'d like to treat you to a drink at our hotel bar.',
             benefitsTitle: 'Benefits',
             benefit1: 'Careful use of water, energy and cleaning products',
@@ -544,6 +550,7 @@
             document.getElementById('checkoutInfo').textContent = t.checkoutInfo;
             document.getElementById('checkoutLabel').textContent = t.checkoutLabel;
             document.getElementById('checkoutBtn').textContent = t.checkoutBtn;
+            document.getElementById('checkoutWarning').textContent = t.checkoutWarning;
             document.getElementById('notPossible').textContent = t.notPossible;
             document.getElementById('introText').textContent = t.introText;
             document.getElementById('benefitsTitle').textContent = t.benefitsTitle;
@@ -641,6 +648,15 @@
 
             if (!checkoutInput) {
                 alert(t.selectDate);
+                return;
+            }
+
+            // Check if before 11:00 AM
+            const now = new Date();
+            if (now.getHours() < 11) {
+                document.getElementById('notPossible').textContent = t.toEarly;
+                document.getElementById('notPossible').style.display = 'block';
+                document.getElementById('checkoutBtn').style.display = 'none';
                 return;
             }
 
