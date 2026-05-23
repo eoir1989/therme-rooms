@@ -6,12 +6,8 @@
     <title>Room Cleaning Preference</title>
     <link href="https://fonts.googleapis.com/css2?family=Metropolis:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Metropolis', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 100%);
@@ -21,11 +17,11 @@
             justify-content: center;
             padding: 16px;
         }
-        
+
         .container {
             background: white;
             border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             max-width: 480px;
             width: 100%;
             padding: 28px 24px;
@@ -38,7 +34,7 @@
             justify-content: flex-end;
             margin-bottom: 20px;
         }
-        
+
         .lang-btn {
             background: none;
             border: 1px solid #ddd;
@@ -48,18 +44,12 @@
             font-size: 12px;
             font-weight: 600;
             color: #666;
-            transition: all 0.3s ease;
-        }
-        
-        .lang-btn.active {
-            background: #1a3a52;
-            color: white;
-            border-color: #1a3a52;
+            transition: all 0.2s;
         }
 
-        .header {
-            margin-bottom: 24px;
-        }
+        .lang-btn.active { background: #1a3a52; color: white; border-color: #1a3a52; }
+
+        .header { margin-bottom: 24px; }
 
         .room-number {
             font-size: 12px;
@@ -76,31 +66,77 @@
             margin-top: 4px;
         }
 
-        h1 {
-            font-size: 20px;
-            color: #1a3a52;
-            margin-bottom: 6px;
-            font-weight: 700;
-        }
+        h1 { font-size: 20px; color: #1a3a52; margin-bottom: 6px; font-weight: 700; }
+        .subtitle { font-size: 13px; color: #0078d4; font-weight: 600; margin-bottom: 20px; }
 
-        .subtitle {
-            font-size: 13px;
-            color: #0078d4;
-            font-weight: 600;
+        /* LOADING */
+        .loading-area { display: none; padding: 40px 0; text-align: center; color: #666; font-size: 14px; }
+        .spinner {
+            width: 32px; height: 32px;
+            border: 3px solid #eee; border-top-color: #1a3a52;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* CHECKOUT SCREEN */
+        .checkout-area { display: none; text-align: left; }
+
+        .checkout-info {
+            background: #f0f6fb;
+            border-left: 5px solid #0078d4;
+            padding: 16px;
+            border-radius: 8px;
             margin-bottom: 20px;
-        }
-
-        .content {
-            margin-bottom: 28px;
-            text-align: left;
-        }
-
-        .intro-text {
             font-size: 14px;
             color: #333;
-            line-height: 1.7;
-            margin-bottom: 20px;
+            line-height: 1.6;
         }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="date"] {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-family: 'Metropolis', sans-serif;
+            font-size: 15px;
+            color: #1a3a52;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .form-group input[type="date"]:focus { border-color: #0078d4; }
+
+        /* NOT POSSIBLE */
+        .not-possible {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #856404;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* CONTENT */
+        .content { display: none; text-align: left; }
+
+        .intro-text { font-size: 14px; color: #333; line-height: 1.7; margin-bottom: 20px; }
 
         .benefits {
             background: #f0f6fb;
@@ -111,31 +147,16 @@
         }
 
         .benefits h3 {
-            font-size: 11px;
-            color: #0056b3;
-            font-weight: 700;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 11px; color: #0056b3; font-weight: 700;
+            margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;
         }
 
         .benefit-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #444;
-            line-height: 1.5;
+            display: flex; align-items: flex-start;
+            margin-bottom: 10px; font-size: 14px; color: #444; line-height: 1.5;
         }
-
         .benefit-item:last-child { margin-bottom: 0; }
-
-        .benefit-icon {
-            flex-shrink: 0;
-            margin-right: 12px;
-            font-size: 17px;
-            min-width: 22px;
-        }
+        .benefit-icon { flex-shrink: 0; margin-right: 12px; font-size: 17px; min-width: 22px; }
 
         .reward-section {
             background: #fef4e6;
@@ -146,37 +167,42 @@
         }
 
         .reward-section h3 {
-            font-size: 11px;
-            color: #8b6f47;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 11px; color: #8b6f47; font-weight: 700;
+            margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .reward-text {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
+        .reward-text { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 10px; }
 
         .drink-item {
+            display: flex; align-items: center;
+            margin-bottom: 10px; font-size: 14px; color: #444;
+        }
+        .drink-item:last-child { margin-bottom: 0; }
+        .drink-icon { flex-shrink: 0; margin-right: 12px; font-size: 17px; min-width: 22px; }
+
+        /* DAYS CHECKBOXES */
+        .days-section { margin-bottom: 20px; }
+
+        .days-section h3 {
+            font-size: 11px; color: #1a3a52; font-weight: 700;
+            margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .day-checkbox {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #444;
+            gap: 12px;
+            padding: 12px 16px;
+            border: 1px solid #dde3ec;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .drink-item:last-child { margin-bottom: 0; }
-
-        .drink-icon {
-            flex-shrink: 0;
-            margin-right: 12px;
-            font-size: 17px;
-            min-width: 22px;
-        }
+        .day-checkbox:hover { border-color: #1a3a52; background: #f8fafc; }
+        .day-checkbox input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #1a3a52; }
+        .day-checkbox label { font-size: 14px; color: #333; cursor: pointer; flex: 1; }
 
         .button {
             background: #1a3a52;
@@ -188,61 +214,37 @@
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .button:hover:not(:disabled) {
-            background: #2d5a7b;
-            transform: translateY(-2px);
-        }
+        .button:hover:not(:disabled) { background: #2d5a7b; transform: translateY(-2px); }
+        .button:disabled { background: #999; cursor: not-allowed; transform: none; }
 
-        .button:disabled {
-            background: #999;
-            cursor: not-allowed;
-        }
-
-        /* LOADING */
-        .loading-area {
-            display: none;
-            padding: 40px 0;
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid #eee;
-            border-top-color: #1a3a52;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 16px;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* VOUCHER - optimizado para móvil */
+        /* VOUCHERS */
         .voucher-area { display: none; }
 
         .success-text {
-            font-size: 17px;
-            color: #2d9e75;
-            font-weight: 700;
-            margin-bottom: 16px;
-            text-align: center;
+            font-size: 17px; color: #2d9e75; font-weight: 700;
+            margin-bottom: 16px; text-align: center;
         }
 
         .voucher {
             border: 3px dashed #d4a574;
             border-radius: 12px;
             padding: 20px 16px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             background: white;
             box-shadow: inset 0 0 0 1px #d4a574;
             animation: slideIn 0.5s ease;
+            transition: all 0.3s;
+        }
+
+        .voucher.used {
+            border-color: #bbb;
+            box-shadow: inset 0 0 0 1px #bbb;
+            opacity: 0.6;
         }
 
         @keyframes slideIn {
@@ -252,83 +254,73 @@
 
         .voucher-header {
             text-align: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             border-bottom: 2px solid #d4a574;
             padding-bottom: 12px;
         }
 
+        .voucher.used .voucher-header { border-bottom-color: #bbb; }
+
         .voucher-title {
-            font-size: 17px;
-            color: #8b6f47;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 4px;
+            font-size: 16px; color: #8b6f47; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;
         }
 
-        .voucher-subtitle {
-            font-size: 12px;
-            color: #666;
-            font-weight: 600;
-        }
+        .voucher.used .voucher-title { color: #999; }
+
+        .voucher-subtitle { font-size: 12px; color: #666; font-weight: 600; }
 
         .voucher-body {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .voucher-field { text-align: center; }
 
         .voucher-label {
-            font-size: 10px;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-            font-weight: 700;
+            font-size: 10px; color: #999;
+            text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 4px; font-weight: 700;
         }
 
-        .voucher-value {
-            font-size: 22px;
-            color: #1a3a52;
-            font-weight: 700;
-        }
+        .voucher-value { font-size: 20px; color: #1a3a52; font-weight: 700; }
+        .voucher.used .voucher-value { color: #999; }
+
+        .voucher-date-range { font-size: 13px; color: #1a3a52; font-weight: 700; }
+        .voucher.used .voucher-date-range { color: #999; }
 
         .voucher-drinks {
             background: #fef4e6;
             border-radius: 8px;
             padding: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             text-align: center;
         }
 
+        .voucher.used .voucher-drinks { background: #f5f5f5; }
+
         .voucher-drinks-title {
-            font-size: 10px;
-            color: #8b6f47;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            font-weight: 700;
+            font-size: 10px; color: #8b6f47;
+            text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 10px; font-weight: 700;
         }
 
+        .voucher.used .voucher-drinks-title { color: #999; }
+
         .drinks-options {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
+            display: flex; justify-content: center;
+            gap: 8px; flex-wrap: wrap;
         }
 
         .drink-option {
-            background: white;
-            border: 1px solid #d4a574;
-            padding: 7px 11px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #555;
-            font-weight: 500;
+            background: white; border: 1px solid #d4a574;
+            padding: 7px 11px; border-radius: 6px;
+            font-size: 12px; color: #555; font-weight: 500;
         }
+
+        .voucher.used .drink-option { border-color: #ccc; color: #999; }
 
         .voucher-footer {
             text-align: center;
@@ -338,20 +330,42 @@
             color: #999;
         }
 
-        .voucher-thanks {
+        .voucher.used .voucher-footer { border-top-color: #ddd; }
+
+        .btn-used {
+            width: 100%;
+            margin-top: 12px;
+            padding: 10px;
+            border: 2px solid #2d9e75;
+            background: white;
+            color: #2d9e75;
+            border-radius: 8px;
+            font-family: 'Metropolis', sans-serif;
             font-size: 13px;
-            color: #666;
-            text-align: center;
-            line-height: 1.7;
-            margin-top: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-used:hover { background: #2d9e75; color: white; }
+
+        .btn-used.is-used {
+            border-color: #ccc;
+            color: #999;
+            cursor: default;
+            text-decoration: line-through;
+        }
+
+        .voucher-thanks {
+            font-size: 13px; color: #666;
+            text-align: center; line-height: 1.7; margin-top: 8px;
         }
 
         .footer-note {
-            font-size: 11px;
-            color: #999;
-            margin-top: 20px;
-            text-align: center;
-            line-height: 1.6;
+            font-size: 11px; color: #999;
+            margin-top: 20px; text-align: center; line-height: 1.6;
         }
     </style>
 </head>
@@ -372,6 +386,23 @@
         <div class="loading-area" id="loadingArea">
             <div class="spinner"></div>
             <p id="loadingText">Bitte warten...</p>
+        </div>
+
+        <!-- CHECKOUT DATE SCREEN -->
+        <div class="checkout-area" id="checkoutArea">
+            <div class="checkout-info" id="checkoutInfo">
+                Bitte geben Sie Ihr Abreisedatum ein, um zu prüfen, ob Sie die Zimmerreinigung abbestellen können.
+            </div>
+            <div class="form-group">
+                <label id="checkoutLabel">Abreisedatum | Check-out date</label>
+                <input type="date" id="checkoutDate">
+            </div>
+            <div class="not-possible" id="notPossible">
+                ⚠️ Da Sie morgen abreisen, ist es leider nicht möglich, die Zimmerreinigung abzubestellen. Wir wünschen Ihnen eine gute Reise!
+            </div>
+            <button class="button" id="checkoutBtn" onclick="checkCheckout()">
+                Weiter
+            </button>
         </div>
 
         <!-- CONTENT -->
@@ -400,19 +431,15 @@
                 <h3 id="rewardTitle">Ihr Freigetränk | Your Free Drink</h3>
                 <p class="reward-text" id="rewardText">Wählen Sie Ihr Getränk an unserer Kaleidoskop Bar</p>
                 <div>
-                    <div class="drink-item">
-                        <span class="drink-icon">🍺</span>
-                        <span id="drink1">Bier</span>
-                    </div>
-                    <div class="drink-item">
-                        <span class="drink-icon">🍷</span>
-                        <span id="drink2">Wein oder Prosecco</span>
-                    </div>
-                    <div class="drink-item">
-                        <span class="drink-icon">🥤</span>
-                        <span id="drink3">Alkoholfreies Getränk</span>
-                    </div>
+                    <div class="drink-item"><span class="drink-icon">🍺</span><span id="drink1">Bier</span></div>
+                    <div class="drink-item"><span class="drink-icon">🍷</span><span id="drink2">Wein oder Prosecco</span></div>
+                    <div class="drink-item"><span class="drink-icon">🥤</span><span id="drink3">Alkoholfreies Getränk</span></div>
                 </div>
+            </div>
+
+            <div class="days-section" id="daysSection">
+                <h3 id="daysTitle">Tage ohne Reinigung auswählen</h3>
+                <div id="daysContainer"></div>
             </div>
 
             <button class="button" id="confirmButton" onclick="confirmarNoLimpieza()">
@@ -420,41 +447,10 @@
             </button>
         </div>
 
-        <!-- VOUCHER -->
+        <!-- VOUCHERS -->
         <div class="voucher-area" id="voucherArea">
             <p class="success-text">✓ <span id="confirmedText">Bestätigt!</span></p>
-
-            <div class="voucher">
-                <div class="voucher-header">
-                    <div class="voucher-title" id="voucherTitle">Getränkegutschein</div>
-                    <div class="voucher-subtitle">Hotel Victory Therme Erding</div>
-                </div>
-
-                <div class="voucher-body">
-                    <div class="voucher-field">
-                        <div class="voucher-label" id="roomLabelVoucher">Zimmer | Room</div>
-                        <div class="voucher-value">001</div>
-                    </div>
-                    <div class="voucher-field">
-                        <div class="voucher-label" id="validLabelVoucher">Gültig am | Valid on</div>
-                        <div class="voucher-value" id="voucherDate">-</div>
-                    </div>
-                </div>
-
-                <div class="voucher-drinks">
-                    <div class="voucher-drinks-title" id="chooseDrinkVoucher">Wählen Sie Ihr Freigetränk:</div>
-                    <div class="drinks-options">
-                        <div class="drink-option">🍺 Bier</div>
-                        <div class="drink-option">🍷 Wein</div>
-                        <div class="drink-option">🥤 Softgetränk</div>
-                    </div>
-                </div>
-
-                <div class="voucher-footer" id="voucherFooter">
-                    Gutschein gültig für einen Tag. Keine Barauszahlung.
-                </div>
-            </div>
-
+            <div id="vouchersContainer"></div>
             <p class="voucher-thanks">
                 <strong id="thankYouText">Vielen Dank!</strong><br>
                 <span id="voucherInstruction">Zeigen Sie diesen Gutschein an unserer Bar vor, um Ihr Freigetränk zu erhalten.</span>
@@ -469,12 +465,18 @@
     <script>
         const ROOM = '001';
         const PA_POST_URL = 'https://defaultf76bf23d7f7f41f18c96cf2f261a1d.bf.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1bc0e613a2cc4be08f3c5ac067dfbfcc/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=NK0XHD30v1BA3o5hfqlyLXDi39nLTxJHB4WtW2U4_x0';
-        const PA_GET_URL = 'https://defaultf76bf23d7f7f41f18c96cf2f261a1d.bf.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/bb96c3466f844fa2affe0b7e3738a708/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=C9rw0Ut2dWHGOoMsyvUbegmSpqNhXKoWMNkl-rBNYLY';
+        const PA_GET_URL  = 'https://defaultf76bf23d7f7f41f18c96cf2f261a1d.bf.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/bb96c3466f844fa2affe0b7e3738a708/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=C9rw0Ut2dWHGOoMsyvUbegmSpqNhXKoWMNkl-rBNYLY';
 
         let currentLanguage = 'DE';
+        let availableDays = []; // dates formatted dd.MM.yyyy
+        let confirmedDays = []; // days already in Excel
 
         const textsDE = {
             roomLabel: 'Zimmer', mainTitle: 'Reinigung abbestellen', mainSubtitle: 'Getränk genießen',
+            checkoutInfo: 'Bitte geben Sie Ihr Abreisedatum ein, um zu prüfen, ob Sie die Zimmerreinigung abbestellen können.',
+            checkoutLabel: 'Abreisedatum | Check-out date',
+            checkoutBtn: 'Weiter',
+            notPossible: '⚠️ Da Sie morgen abreisen, ist es leider nicht möglich, die Zimmerreinigung abzubestellen. Wir wünschen Ihnen eine gute Reise!',
             introText: 'Verzichten Sie auf die Zimmerreinigung und leisten Sie gemeinsam mit uns einen kleinen Beitrag zum Umweltschutz. Als Dankeschön laden wir Sie auf ein Getränk in unsere Hotelbar ein.',
             benefitsTitle: 'Vorteile | Benefits',
             benefit1: 'Schonender Umgang mit Wasser, Energie und Reinigungsmitteln',
@@ -483,8 +485,11 @@
             rewardTitle: 'Ihr Freigetränk | Your Free Drink',
             rewardText: 'Wählen Sie Ihr Getränk an unserer Kaleidoskop Bar',
             drink1: 'Bier', drink2: 'Wein oder Prosecco', drink3: 'Alkoholfreies Getränk',
+            daysTitle: 'Tage ohne Reinigung auswählen',
             confirmButton: 'Reinigung abbestellen', registering: 'Wird registriert...',
-            confirmedText: 'Bestätigt!', voucherTitle: 'Getränkegutschein',
+            confirmedText: 'Bestätigt!',
+            voucherTitle: 'Getränkegutschein',
+            voucherSubtitle: 'Hotel Victory Therme Erding',
             roomLabelVoucher: 'Zimmer | Room', validLabelVoucher: 'Gültig am | Valid on',
             chooseDrinkVoucher: 'Wählen Sie Ihr Freigetränk:',
             voucherFooter: 'Gutschein gültig für einen Tag. Keine Barauszahlung.',
@@ -492,11 +497,18 @@
             voucherInstruction: 'Zeigen Sie diesen Gutschein an unserer Bar vor, um Ihr Freigetränk zu erhalten.',
             footerNote: 'Ihre Privatsphäre ist geschützt. Es werden keine persönlichen Daten gespeichert.',
             loading: 'Bitte warten...',
-            error: 'Fehler bei der Registrierung. Bitte versuchen Sie es erneut.'
+            btnUsed: 'Als verwendet markieren',
+            btnAlreadyUsed: 'Verwendet ✓',
+            error: 'Fehler bei der Registrierung. Bitte versuchen Sie es erneut.',
+            selectDate: 'Bitte Abreisedatum auswählen.'
         };
 
         const textsEN = {
             roomLabel: 'Room', mainTitle: 'Cancel room cleaning', mainSubtitle: 'Enjoy a drink',
+            checkoutInfo: 'Please enter your check-out date to see if you can cancel room cleaning.',
+            checkoutLabel: 'Check-out date | Abreisedatum',
+            checkoutBtn: 'Continue',
+            notPossible: '⚠️ Since you are checking out tomorrow, it is unfortunately not possible to cancel room cleaning. We wish you a pleasant journey!',
             introText: 'Skip room cleaning and help us make a small contribution to protecting the environment. As a thank you, we\'d like to treat you to a drink at our hotel bar.',
             benefitsTitle: 'Benefits',
             benefit1: 'Careful use of water, energy and cleaning products',
@@ -505,8 +517,11 @@
             rewardTitle: 'Your Free Drink',
             rewardText: 'Choose your drink at our Kaleidoskop Bar',
             drink1: 'Beer', drink2: 'Wine or prosecco', drink3: 'Alcohol-free beverage',
+            daysTitle: 'Select days without cleaning',
             confirmButton: 'Cancel room cleaning', registering: 'Registering...',
-            confirmedText: 'Confirmed!', voucherTitle: 'Drink Voucher',
+            confirmedText: 'Confirmed!',
+            voucherTitle: 'Drink Voucher',
+            voucherSubtitle: 'Hotel Victory Therme Erding',
             roomLabelVoucher: 'Room', validLabelVoucher: 'Valid on',
             chooseDrinkVoucher: 'Choose your free drink:',
             voucherFooter: 'Voucher valid for one day. No cash redemption.',
@@ -514,7 +529,10 @@
             voucherInstruction: 'Present this voucher at our bar to receive your free drink.',
             footerNote: 'Your privacy is protected. No personal data will be stored.',
             loading: 'Please wait...',
-            error: 'Error registering. Please try again.'
+            btnUsed: 'Mark as used',
+            btnAlreadyUsed: 'Used ✓',
+            error: 'Error registering. Please try again.',
+            selectDate: 'Please select a check-out date.'
         };
 
         function setLanguage(lang) {
@@ -523,6 +541,10 @@
             document.getElementById('roomLabel').innerHTML = `${t.roomLabel} <strong>${ROOM}</strong>`;
             document.getElementById('mainTitle').textContent = t.mainTitle;
             document.getElementById('mainSubtitle').textContent = t.mainSubtitle;
+            document.getElementById('checkoutInfo').textContent = t.checkoutInfo;
+            document.getElementById('checkoutLabel').textContent = t.checkoutLabel;
+            document.getElementById('checkoutBtn').textContent = t.checkoutBtn;
+            document.getElementById('notPossible').textContent = t.notPossible;
             document.getElementById('introText').textContent = t.introText;
             document.getElementById('benefitsTitle').textContent = t.benefitsTitle;
             document.getElementById('benefit1').textContent = t.benefit1;
@@ -533,13 +555,9 @@
             document.getElementById('drink1').textContent = t.drink1;
             document.getElementById('drink2').textContent = t.drink2;
             document.getElementById('drink3').textContent = t.drink3;
+            document.getElementById('daysTitle').textContent = t.daysTitle;
             document.getElementById('confirmButton').textContent = t.confirmButton;
             document.getElementById('confirmedText').textContent = t.confirmedText;
-            document.getElementById('voucherTitle').textContent = t.voucherTitle;
-            document.getElementById('roomLabelVoucher').textContent = t.roomLabelVoucher;
-            document.getElementById('validLabelVoucher').textContent = t.validLabelVoucher;
-            document.getElementById('chooseDrinkVoucher').textContent = t.chooseDrinkVoucher;
-            document.getElementById('voucherFooter').textContent = t.voucherFooter;
             document.getElementById('thankYouText').textContent = t.thankYouText;
             document.getElementById('voucherInstruction').textContent = t.voucherInstruction;
             document.getElementById('footerNote').textContent = t.footerNote;
@@ -550,24 +568,48 @@
 
         function showLoading() {
             document.getElementById('loadingArea').style.display = 'block';
+            document.getElementById('checkoutArea').style.display = 'none';
+            document.getElementById('contentArea').style.display = 'none';
+            document.getElementById('voucherArea').style.display = 'none';
+        }
+
+        function showCheckout() {
+            document.getElementById('loadingArea').style.display = 'none';
+            document.getElementById('checkoutArea').style.display = 'block';
             document.getElementById('contentArea').style.display = 'none';
             document.getElementById('voucherArea').style.display = 'none';
         }
 
         function showContent() {
             document.getElementById('loadingArea').style.display = 'none';
+            document.getElementById('checkoutArea').style.display = 'none';
             document.getElementById('contentArea').style.display = 'block';
             document.getElementById('voucherArea').style.display = 'none';
         }
 
-        function showVoucher(datum) {
+        function showVouchers() {
             document.getElementById('loadingArea').style.display = 'none';
+            document.getElementById('checkoutArea').style.display = 'none';
             document.getElementById('contentArea').style.display = 'none';
             document.getElementById('voucherArea').style.display = 'block';
-            document.getElementById('voucherDate').textContent = datum;
             document.getElementById('footerNote').style.opacity = '0.5';
+            renderVouchers();
         }
 
+        // Format date to dd.MM.yyyy
+        function formatDate(date) {
+            return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        // Get today + tomorrow as date objects
+        function getToday() { return new Date(); }
+        function getTomorrow() {
+            const d = new Date();
+            d.setDate(d.getDate() + 1);
+            return d;
+        }
+
+        // STEP 1: Check Excel for existing entries
         async function checkExcel() {
             showLoading();
             try {
@@ -575,61 +617,183 @@
                 const raw = await response.json();
                 const data = Array.isArray(raw) ? raw : (raw.body || raw.value || []);
 
-                const tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                const tomorrowStr = tomorrow.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                // Find confirmed days for this room
+                confirmedDays = data
+                    .filter(e => e.Zimmer === ROOM)
+                    .map(e => e.Datum);
 
-                const existing = data.find(e => e.Zimmer === ROOM && e.Datum === tomorrowStr);
-
-                if (existing) {
-                    showVoucher(tomorrowStr);
+                if (confirmedDays.length > 0) {
+                    // Already has entries, show vouchers
+                    showVouchers();
                 } else {
-                    showContent();
+                    showCheckout();
                 }
             } catch (e) {
                 console.error(e);
-                showContent();
+                showCheckout();
             }
         }
 
-        async function confirmarNoLimpieza() {
-            const button = document.getElementById('confirmButton');
+        // STEP 2: Check checkout date
+        function checkCheckout() {
             const t = currentLanguage === 'EN' ? textsEN : textsDE;
+            const checkoutInput = document.getElementById('checkoutDate').value;
+
+            if (!checkoutInput) {
+                alert(t.selectDate);
+                return;
+            }
+
+            const today = getToday();
+            today.setHours(0,0,0,0);
+            const checkout = new Date(checkoutInput);
+            checkout.setHours(0,0,0,0);
+
+            // Days without cleaning = from tomorrow to day before checkout
+            availableDays = [];
+            const current = new Date(today);
+            current.setDate(current.getDate() + 1); // start from tomorrow
+
+            while (current < checkout) {
+                availableDays.push(formatDate(new Date(current)));
+                current.setDate(current.getDate() + 1);
+            }
+
+            if (availableDays.length === 0) {
+                // Not possible
+                document.getElementById('notPossible').style.display = 'block';
+                document.getElementById('checkoutBtn').style.display = 'none';
+                return;
+            }
+
+            // Render checkboxes
+            renderDayCheckboxes();
+            showContent();
+        }
+
+        function renderDayCheckboxes() {
+            const container = document.getElementById('daysContainer');
+            container.innerHTML = availableDays.map((day, i) => `
+                <div class="day-checkbox">
+                    <input type="checkbox" id="day_${i}" value="${day}" checked>
+                    <label for="day_${i}">📅 ${day}</label>
+                </div>
+            `).join('');
+        }
+
+        // STEP 3: Confirm
+        async function confirmarNoLimpieza() {
+            const t = currentLanguage === 'EN' ? textsEN : textsDE;
+            const button = document.getElementById('confirmButton');
+
+            // Get selected days
+            const selected = availableDays.filter((day, i) => {
+                const cb = document.getElementById(`day_${i}`);
+                return cb && cb.checked;
+            });
+
+            if (selected.length === 0) {
+                alert(currentLanguage === 'EN' ? 'Please select at least one day.' : 'Bitte mindestens einen Tag auswählen.');
+                return;
+            }
+
             button.disabled = true;
             button.textContent = t.registering;
 
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const tomorrowStr = tomorrow.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const today = getToday();
+            const todayStr = formatDate(today);
 
-            const data = {
-                id: Math.random().toString(36).substring(2, 10).toUpperCase(),
-                zimmer: ROOM,
-                datum: tomorrowStr,
-                uhrzeit: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-                status: 'Keine Reinigung',
-                zeitstempel: new Date().toLocaleString('de-DE'),
-                kuerzel: 'Web'
-            };
+            for (const day of selected) {
+                const data = {
+                    id: Math.random().toString(36).substring(2, 10).toUpperCase(),
+                    zimmer: ROOM,
+                    datum: day,
+                    uhrzeit: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                    status: 'Keine Reinigung',
+                    zeitstempel: new Date().toLocaleString('de-DE'),
+                    kuerzel: 'Web'
+                };
 
-            try {
                 await fetch(PA_POST_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                showVoucher(tomorrowStr);
-            } catch (error) {
-                console.error(error);
-                button.disabled = false;
-                button.textContent = t.confirmButton;
-                alert(t.error);
             }
+
+            confirmedDays = selected;
+            showVouchers();
+        }
+
+        // RENDER VOUCHERS
+        function renderVouchers() {
+            const t = currentLanguage === 'EN' ? textsEN : textsDE;
+            const container = document.getElementById('vouchersContainer');
+            const today = getToday();
+            const todayStr = formatDate(today);
+
+            container.innerHTML = confirmedDays.map((day, i) => {
+                const storageKey = `room_${ROOM}_voucher_${day}`;
+                const isUsed = localStorage.getItem(storageKey) === 'used';
+                const usedClass = isUsed ? 'used' : '';
+                const btnText = isUsed ? t.btnAlreadyUsed : t.btnUsed;
+                const btnClass = isUsed ? 'btn-used is-used' : 'btn-used';
+
+                return `
+                <div class="voucher ${usedClass}" id="voucher_${i}">
+                    <div class="voucher-header">
+                        <div class="voucher-title">${t.voucherTitle}</div>
+                        <div class="voucher-subtitle">${t.voucherSubtitle}</div>
+                    </div>
+                    <div class="voucher-body">
+                        <div class="voucher-field">
+                            <div class="voucher-label">${t.roomLabelVoucher}</div>
+                            <div class="voucher-value">${ROOM}</div>
+                        </div>
+                        <div class="voucher-field">
+                            <div class="voucher-label">${t.validLabelVoucher}</div>
+                            <div class="voucher-date-range">${todayStr}<br>${day}</div>
+                        </div>
+                    </div>
+                    <div class="voucher-drinks">
+                        <div class="voucher-drinks-title">${t.chooseDrinkVoucher}</div>
+                        <div class="drinks-options">
+                            <div class="drink-option">🍺 ${currentLanguage === 'EN' ? 'Beer' : 'Bier'}</div>
+                            <div class="drink-option">🍷 ${currentLanguage === 'EN' ? 'Wine' : 'Wein'}</div>
+                            <div class="drink-option">🥤 ${currentLanguage === 'EN' ? 'Soft drink' : 'Softgetränk'}</div>
+                        </div>
+                    </div>
+                    <div class="voucher-footer">${t.voucherFooter}</div>
+                    <button class="${btnClass}" id="btnUsed_${i}" onclick="markAsUsed(${i}, '${day}')" ${isUsed ? 'disabled' : ''}>
+                        ${btnText}
+                    </button>
+                </div>`;
+            }).join('');
+        }
+
+        function markAsUsed(index, day) {
+            const t = currentLanguage === 'EN' ? textsEN : textsDE;
+            const storageKey = `room_${ROOM}_voucher_${day}`;
+            localStorage.setItem(storageKey, 'used');
+
+            const voucher = document.getElementById(`voucher_${index}`);
+            voucher.classList.add('used');
+
+            const btn = document.getElementById(`btnUsed_${index}`);
+            btn.textContent = t.btnAlreadyUsed;
+            btn.classList.add('is-used');
+            btn.disabled = true;
         }
 
         window.addEventListener('load', function() {
             const lang = (navigator.language || navigator.userLanguage).startsWith('en') ? 'EN' : 'DE';
             setLanguage(lang);
+
+            // Set min date for checkout input (day after tomorrow minimum)
+            const minDate = new Date();
+            minDate.setDate(minDate.getDate() + 2);
+            document.getElementById('checkoutDate').min = minDate.toISOString().split('T')[0];
+
             checkExcel();
         });
     </script>
