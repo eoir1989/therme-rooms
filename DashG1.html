@@ -865,7 +865,7 @@
             await fetch(PA_DELETE_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ itemId: deleteTargetId })
+                body: JSON.stringify({ id: deleteTargetId })
             });
             showToast('Eintrag gelöscht ✓', 'success');
             await loadEntries();
