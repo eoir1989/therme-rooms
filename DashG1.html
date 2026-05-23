@@ -845,6 +845,7 @@
 
     // ── DELETE ──
     function openDeleteModal(id) {
+        console.log('openDeleteModal llamado con ID:', id);
         deleteTargetId = id;
         document.getElementById('deleteKuerzel').value = '';
         document.getElementById('deleteModal').classList.add('open');
