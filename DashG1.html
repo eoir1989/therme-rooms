@@ -554,7 +554,7 @@
         <input type="password" class="pin-input" id="pinInput" placeholder="······" maxlength="6" autocomplete="off">
         <button class="pin-btn" onclick="checkPin()">Einloggen</button>
         <span class="pin-error" id="pinError">Falscher Code. Bitte erneut versuchen.</span>
-        <span style="color: rgba(255,255,255,0.2); font-size: 11px; margin-top: 8px;">v0.2</span>
+        <span style="color: rgba(255,255,255,0.2); font-size: 11px; margin-top: 8px;">v0.2.2</span>
     </div>
 </div>
 
@@ -730,10 +730,10 @@
         }
 
         const rows = data.map(entry => {
-            const isUsed = entry.Verwendet === 'true' || entry.Verwendet === true;
+            const isUsed = String(entry.Verwendet).toLowerCase() === 'true' || String(entry.Verwendet).toLowerCase() === 'wahr';
             const usedBtn = isUsed
-                ? `<button class="btn-delete" style="border-color:#2d9e75;color:#2d9e75;" onclick="toggleVerwendet('${entry.ID}', false)">✓ Verwendet</button>`
-                : `<button class="btn-delete" onclick="toggleVerwendet('${entry.ID}', true)">Als verwendet markieren</button>`;
+                ? `<button class="btn-delete" style="border-color:#2d9e75;color:#2d9e75;background:#e8f7f1;" onclick="toggleVerwendet('${entry.ID}', 'false')">✓ Verwendet</button>`
+                : `<button class="btn-delete" onclick="toggleVerwendet('${entry.ID}', 'true')">Markieren</button>`;
             return `
             <tr style="${isUsed ? 'opacity:0.5;' : ''}">
                 <td><strong>${entry.Zimmer}</strong></td>
@@ -765,16 +765,16 @@
             await fetch(PA_UPDATE_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, verwendet: used ? 'true' : 'false' })
+                body: JSON.stringify({ id, verwendet: used })
             });
-            showToast(used ? 'Als verwendet markiert ✓' : 'Als nicht verwendet markiert', 'success');
+            showToast(used === 'true' ? 'Als verwendet markiert ✓' : 'Markierung entfernt', 'success');
             await loadEntries();
         } catch (e) {
             console.error(e);
             showToast('Fehler beim Aktualisieren', 'error');
         }
     }
-    
+
     // ── ADD ENTRIES ──
     function calculateDays() {
         const zimmer = document.getElementById('addZimmer').value.trim();
