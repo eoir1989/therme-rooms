@@ -730,7 +730,7 @@
                 <td><strong>${entry.Zimmer}</strong></td>
                 <td>${entry.Datum}</td>
                 <td><span class="${entry.Kuerzel === 'Web' ? 'badge-web' : 'badge-staff'}">${entry.Kuerzel || 'Web'}</span></td>
-                <td><button class="btn-delete" onclick="openDeleteModal('${entry.ItemInternalId}')">Löschen</button></td>
+                <td><button class="btn-delete" onclick="openDeleteModal('${entry.ID}')" ${!entry.ID ? 'disabled' : ''}>Löschen</button></td>
             </tr>
         `).join('');
 
