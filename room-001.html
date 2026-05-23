@@ -468,6 +468,7 @@
         const ROOM = '001';
         const PA_POST_URL = 'https://defaultf76bf23d7f7f41f18c96cf2f261a1d.bf.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1bc0e613a2cc4be08f3c5ac067dfbfcc/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=NK0XHD30v1BA3o5hfqlyLXDi39nLTxJHB4WtW2U4_x0';
         const PA_GET_URL  = 'https://defaultf76bf23d7f7f41f18c96cf2f261a1d.bf.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/bb96c3466f844fa2affe0b7e3738a708/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=C9rw0Ut2dWHGOoMsyvUbegmSpqNhXKoWMNkl-rBNYLY';
+        const PA_UPDATE_URL = 'https://defaultf76bf23d7f7f41f18c96cf2f261a1d.bf.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a9e99cbae87e49499870e972647c39b9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zWmdfKjyulVYa65jj_Qq4ACbpWjPI6bsP4t6Yl2pFDs';
 
         let currentLanguage = 'DE';
         let availableDays = []; // dates formatted dd.MM.yyyy
@@ -624,10 +625,10 @@
                 const raw = await response.json();
                 const data = Array.isArray(raw) ? raw : (raw.body || raw.value || []);
 
-                // Find confirmed days for this room
+                // Find confirmed days for this room - save full objects with ID
                 confirmedDays = data
                     .filter(e => e.Zimmer === ROOM)
-                    .map(e => e.Datum);
+                    .map(e => ({ datum: e.Datum, id: e.ID, verwendet: e.Verwendet }));
 
                 if (confirmedDays.length > 0) {
                     // Already has entries, show vouchers
@@ -737,7 +738,7 @@
                 });
             }
 
-            confirmedDays = selected;
+            confirmedDays = selected.map(day => ({ datum: day, id: null, verwendet: null }));
             showVouchers();
         }
 
@@ -747,13 +748,15 @@
             const container = document.getElementById('vouchersContainer');
             const today = getToday();
             const todayStr = formatDate(today);
+            const tomorrow = getTomorrow();
+            const tomorrowStr = formatDate(tomorrow);
 
-            container.innerHTML = confirmedDays.map((day, i) => {
-                const storageKey = `room_${ROOM}_voucher_${day}`;
-                const isUsed = localStorage.getItem(storageKey) === 'used';
+            container.innerHTML = confirmedDays.map((entry, i) => {
+                const isUsed = String(entry.verwendet).toLowerCase() === 'true' || String(entry.verwendet).toLowerCase() === 'wahr';
                 const usedClass = isUsed ? 'used' : '';
                 const btnText = isUsed ? t.btnAlreadyUsed : t.btnUsed;
                 const btnClass = isUsed ? 'btn-used is-used' : 'btn-used';
+                const validText = i === 0 ? `${todayStr} – ${tomorrowStr}` : entry.datum;
 
                 return `
                 <div class="voucher ${usedClass}" id="voucher_${i}">
@@ -768,37 +771,55 @@
                         </div>
                         <div class="voucher-field">
                             <div class="voucher-label">${t.validLabelVoucher}</div>
-                            <div class="voucher-date-range">${todayStr}<br>${day}</div>
+                            <div class="voucher-date-range">${validText}</div>
                         </div>
                     </div>
                     <div class="voucher-drinks">
                         <div class="voucher-drinks-title">${t.chooseDrinkVoucher}</div>
                         <div class="drinks-options">
-                            <div class="drink-option">🍺 ${currentLanguage === 'EN' ? 'Beer' : 'Bier'}</div>
-                            <div class="drink-option">🍷 ${currentLanguage === 'EN' ? 'Wine' : 'Wein'}</div>
-                            <div class="drink-option">🥤 ${currentLanguage === 'EN' ? 'Soft drink' : 'Softgetränk'}</div>
+                            <div class="drink-option">🍺 ${t.drink1}</div>
+                            <div class="drink-option">🍷 ${t.drink2}</div>
+                            <div class="drink-option">🥤 ${t.drink3}</div>
                         </div>
                     </div>
                     <div class="voucher-footer">${t.voucherFooter}</div>
-                    <button class="${btnClass}" id="btnUsed_${i}" onclick="markAsUsed(${i}, '${day}')" ${isUsed ? 'disabled' : ''}>
+                    <button class="${btnClass}" id="btnUsed_${i}" onclick="markAsUsed(${i})" ${isUsed ? 'disabled' : ''}>
                         ${btnText}
                     </button>
                 </div>`;
             }).join('');
         }
 
-        function markAsUsed(index, day) {
+        async function markAsUsed(index) {
             const t = currentLanguage === 'EN' ? textsEN : textsDE;
-            const storageKey = `room_${ROOM}_voucher_${day}`;
-            localStorage.setItem(storageKey, 'used');
+            const entry = confirmedDays[index];
 
-            const voucher = document.getElementById(`voucher_${index}`);
-            voucher.classList.add('used');
+            if (!entry.id) {
+                // No ID yet (just confirmed), reload to get ID from Excel
+                await new Promise(r => setTimeout(r, 1000));
+                await checkExcel();
+                return;
+            }
 
-            const btn = document.getElementById(`btnUsed_${index}`);
-            btn.textContent = t.btnAlreadyUsed;
-            btn.classList.add('is-used');
-            btn.disabled = true;
+            try {
+                await fetch(PA_UPDATE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: entry.id, verwendet: 'true' })
+                });
+
+                confirmedDays[index].verwendet = 'true';
+
+                const voucher = document.getElementById(`voucher_${index}`);
+                voucher.classList.add('used');
+                const btn = document.getElementById(`btnUsed_${index}`);
+                btn.textContent = t.btnAlreadyUsed;
+                btn.classList.add('is-used');
+                btn.disabled = true;
+            } catch (error) {
+                console.error(error);
+                alert(t.error);
+            }
         }
 
         window.addEventListener('load', function() {
