@@ -554,7 +554,7 @@
         <input type="password" class="pin-input" id="pinInput" placeholder="······" maxlength="6" autocomplete="off">
         <button class="pin-btn" onclick="checkPin()">Einloggen</button>
         <span class="pin-error" id="pinError">Falscher Code. Bitte erneut versuchen.</span>
-        <span style="color: rgba(255,255,255,0.2); font-size: 11px; margin-top: 8px;">v0.2.2</span>
+        <span style="color: rgba(255,255,255,0.2); font-size: 11px; margin-top: 8px;">v0.3</span>
     </div>
 </div>
 
@@ -622,6 +622,32 @@
                 </div>
             </div>
         </div>
+
+        <!-- F&B ABRECHNUNG -->
+        <div class="card">
+            <div class="card-header">
+                <h2>🍷 F&B Abrechnung</h2>
+            </div>
+            <div class="card-body">
+                <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:16px;align-items:end;">
+                    <div class="form-group">
+                        <label>Von</label>
+                        <input type="date" id="fnbVon">
+                    </div>
+                    <div class="form-group">
+                        <label>Bis</label>
+                        <input type="date" id="fnbBis">
+                    </div>
+                    <button class="btn-add" onclick="calcFnB()" style="height:40px;">Berechnen</button>
+                </div>
+                <div id="fnbResult" style="display:none;margin-top:20px;text-align:center;padding:24px;background:#f0f6fb;border-radius:10px;border-left:5px solid #1a3a52;">
+                    <div style="font-size:12px;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Verwendete Gutscheine</div>
+                    <div id="fnbCount" style="font-size:48px;font-weight:700;color:#1a3a52;"></div>
+                    <div id="fnbRange" style="font-size:13px;color:#999;margin-top:8px;"></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -768,7 +794,7 @@
                 body: JSON.stringify({ id, verwendet: used })
             });
             showToast(used === 'true' ? 'Als verwendet markiert ✓' : 'Markierung entfernt', 'success');
-            await loadEntries();
+            await new Promise(r => setTimeout(r, 500)); await loadEntries();
         } catch (e) {
             console.error(e);
             showToast('Fehler beim Aktualisieren', 'error');
@@ -864,7 +890,7 @@
         document.getElementById('addKuerzel').value = '';
         document.getElementById('addAnreise').value = new Date().toISOString().split('T')[0];
         document.getElementById('addAbreise').value = '';
-        await loadEntries();
+        await new Promise(r => setTimeout(r, 500)); await loadEntries();
     }
 
     // ── DELETE ──
@@ -897,10 +923,47 @@
                 body: JSON.stringify({ id: idToDelete })
             });
             showToast('Eintrag gelöscht ✓', 'success');
-            await loadEntries();
+            await new Promise(r => setTimeout(r, 500)); await loadEntries();
         } catch (error) {
             console.error(error);
             showToast('Fehler beim Löschen', 'error');
+        }
+    }
+
+    // ── F&B ABRECHNUNG ──
+    async function calcFnB() {
+        const von = document.getElementById('fnbVon').value;
+        const bis = document.getElementById('fnbBis').value;
+
+        if (!von || !bis) { showToast('Bitte Von und Bis Datum auswählen', 'error'); return; }
+        if (von > bis) { showToast('Von muss vor Bis liegen', 'error'); return; }
+
+        try {
+            const response = await fetch(PA_GET_URL, { method: 'POST' });
+            const text = await response.text();
+            const data = JSON.parse(text);
+            const allEntries = Array.isArray(data) ? data : (data.body || data.value || []);
+
+            // Filter by date range and Verwendet = true
+            const vonDate = von.split('-').reverse().join('.');
+            const bisDate = bis.split('-').reverse().join('.');
+
+            const count = allEntries.filter(e => {
+                const isUsed = String(e.Verwendet).toLowerCase() === 'true' || String(e.Verwendet).toLowerCase() === 'wahr';
+                if (!isUsed) return false;
+                // Compare dates dd.MM.yyyy
+                const parts = (e.Datum || '').split('.');
+                if (parts.length !== 3) return false;
+                const entryDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                return entryDate >= von && entryDate <= bis;
+            }).length;
+
+            document.getElementById('fnbCount').textContent = count;
+            document.getElementById('fnbRange').textContent = `${vonDate} – ${bisDate}`;
+            document.getElementById('fnbResult').style.display = 'block';
+        } catch (e) {
+            console.error(e);
+            showToast('Fehler beim Laden der Daten', 'error');
         }
     }
 
