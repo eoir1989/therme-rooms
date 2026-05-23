@@ -495,6 +495,7 @@
             confirmedText: 'Bestätigt!',
             voucherTitle: 'Getränkegutschein',
             voucherSubtitle: 'Hotel Victory Therme Erding',
+            voucherBar: 'Kaleidoskop Bar · Lobby',
             roomLabelVoucher: 'Zimmer | Room', validLabelVoucher: 'Gültig am | Valid on',
             chooseDrinkVoucher: 'Wählen Sie Ihr Freigetränk:',
             voucherFooter: 'Gutschein gültig für einen Tag. Keine Barauszahlung.',
@@ -529,6 +530,7 @@
             confirmedText: 'Confirmed!',
             voucherTitle: 'Drink Voucher',
             voucherSubtitle: 'Hotel Victory Therme Erding',
+            voucherBar: 'Kaleidoskop Bar · Lobby',
             roomLabelVoucher: 'Room', validLabelVoucher: 'Valid on',
             chooseDrinkVoucher: 'Choose your free drink:',
             voucherFooter: 'Voucher valid for one day. No cash redemption.',
@@ -572,6 +574,10 @@
             document.getElementById('loadingText').textContent = t.loading;
             document.getElementById('btnDE').classList.toggle('active', lang === 'DE');
             document.getElementById('btnEN').classList.toggle('active', lang === 'EN');
+            // Re-render vouchers if visible
+            if (document.getElementById('voucherArea').style.display === 'block' && confirmedDays.length > 0) {
+                renderVouchers();
+            }
         }
 
         function showLoading() {
@@ -776,6 +782,7 @@
                     </div>
                     <div class="voucher-drinks">
                         <div class="voucher-drinks-title">${t.chooseDrinkVoucher}</div>
+                        <div style="font-size:11px;color:#8b6f47;margin-bottom:8px;">📍 ${t.voucherBar}</div>
                         <div class="drinks-options">
                             <div class="drink-option">🍺 ${t.drink1}</div>
                             <div class="drink-option">🍷 ${t.drink2}</div>
