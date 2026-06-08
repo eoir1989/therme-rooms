@@ -106,6 +106,15 @@ html,body{height:100%;overflow:hidden}
 .timeout-fill{position:absolute;left:0;top:0;height:100%;background:rgba(201,169,110,.3);border-radius:50px;width:0%;pointer-events:none}
 .timeout-label{position:relative;z-index:1}
 
+/* ── INFO GRID (S3) ── */
+.ty-sub{font-size:14px;color:rgba(255,255,255,.75);text-align:center;margin-bottom:14px;line-height:1.5}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.info-block{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px}
+.info-block.highlight{border-color:rgba(201,169,110,.35);background:rgba(201,169,110,.08)}
+.info-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#C9A96E;margin-bottom:5px}
+.info-block.highlight .info-label{color:#C9A96E}
+.info-text{font-size:12px;color:rgba(255,255,255,.78);line-height:1.5}
+
 /* ── DIVIDER ── */
 .divider{border-top:1px solid rgba(201,169,110,.2);padding-top:10px;margin-top:2px;width:100%}
 </style>
@@ -217,10 +226,27 @@ html,body{height:100%;overflow:hidden}
       <div class="card" style="overflow-y:auto;flex:1">
         <div class="ty-icon">✓</div>
         <div class="ty-title" id="t-tytitle">Vielen Dank!</div>
-        <ul class="tips">
-          <li><div class="tip-dot">👘</div><span id="t-tip1">Sie dürfen unsere Bademäntel und Handtücher weiterhin nutzen. Bitte geben Sie diese an der Rezeption zurück.</span></li>
-          <li><div class="tip-dot">🗝</div><span id="t-tip2">Mit Ihrem grünen Schlüssel können Sie einen Spind in der Umkleidekabine nutzen.</span></li>
-        </ul>
+        <p class="ty-sub" id="t-tysub">Vielen Dank für die Information. Sie können jetzt die Therme genießen.</p>
+
+        <div class="info-grid">
+          <div class="info-block">
+            <div class="info-label" id="t-il1">Handtücher &amp; Bademäntel</div>
+            <p class="info-text" id="t-it1">Sie dürfen Handtücher, Bademantel und Armband den ganzen Tag weiter nutzen. Bitte geben Sie alles am Ende Ihres Besuchs an der Rezeption zurück.</p>
+          </div>
+          <div class="info-block">
+            <div class="info-label" id="t-il2">Gepäck</div>
+            <p class="info-text" id="t-it2">Falls Sie Gepäck haben, können Sie es gerne bei unseren Mitarbeitern rechts neben der Rezeption abgeben.</p>
+          </div>
+          <div class="info-block">
+            <div class="info-label" id="t-il3">Spinde in der Umkleidekabine</div>
+            <p class="info-text" id="t-it3">Die Spinde mit dem Hotellogo lassen sich mit Ihrem grünen Armband verschließen.</p>
+          </div>
+          <div class="info-block highlight">
+            <div class="info-label" id="t-il4">Check-out</div>
+            <p class="info-text" id="t-it4">Nach Ihrem Therme-Besuch kommen Sie bitte zur Rezeption, um Handtücher und Bademantel abzugeben und den finalen Check-out durchzuführen. Die Rezeption ist rund um die Uhr geöffnet.</p>
+          </div>
+        </div>
+
         <div class="divider">
           <div class="clabel" id="t-smilabel">Wie war Ihr Aufenthalt? (optional)</div>
           <div class="smiley-row">
@@ -232,7 +258,6 @@ html,body{height:100%;overflow:hidden}
           </div>
           <p class="smiley-hint" id="t-smihint">Tippen Sie auf ein Emoji — oder überspringen Sie diesen Schritt</p>
         </div>
-        <p class="farewell" id="t-farewell">Genießen Sie Ihren Tag in der Therme –<br>wir sehen uns später an der Rezeption!</p>
       </div>
       <div class="timeout-wrap">
         <button class="timeout-btn" id="timeout-btn-therme" onclick="doReset()">
@@ -283,8 +308,11 @@ var TX={
     s2title:'Und Ihr Nachname?', s2body:'Bitte geben Sie die ersten 4 Buchstaben Ihres Nachnamens ein.',
     nlabel:'Nachname (erste 4 Buchstaben)', nhint:'Großbuchstaben werden automatisch gesetzt', s2btn:'Absenden',
     tytitle:'Vielen Dank!',
-    tip1:'Sie dürfen unsere Bademäntel und Handtücher weiterhin nutzen. Bitte geben Sie diese an der Rezeption zurück.',
-    tip2:'Mit Ihrem grünen Schlüssel können Sie einen Spind in der Umkleidekabine nutzen.',
+    tysub:'Vielen Dank für die Information. Sie können jetzt die Therme genießen.',
+    il1:'Handtücher & Bademäntel', it1:'Sie dürfen Handtücher, Bademantel und Armband den ganzen Tag weiter nutzen. Bitte geben Sie alles am Ende Ihres Besuchs an der Rezeption zurück.',
+    il2:'Gepäck', it2:'Falls Sie Gepäck haben, können Sie es gerne bei unseren Mitarbeitern rechts neben der Rezeption abgeben.',
+    il3:'Spinde in der Umkleidekabine', it3:'Die Spinde mit dem Hotellogo lassen sich mit Ihrem grünen Armband verschließen.',
+    il4:'Check-out', it4:'Nach Ihrem Therme-Besuch kommen Sie bitte zur Rezeption, um Handtücher und Bademantel abzugeben und den finalen Check-out durchzuführen. Die Rezeption ist rund um die Uhr geöffnet.',
     smilabel:'Wie war Ihr Aufenthalt? (optional)',
     smihint:'Tippen Sie auf ein Emoji — oder überspringen Sie diesen Schritt',
     farewell:'Genießen Sie Ihren Tag in der Therme –<br>wir sehen uns später an der Rezeption!',
@@ -306,8 +334,11 @@ var TX={
     s2title:'Your last name?', s2body:'Please enter the first 4 letters of your last name.',
     nlabel:'Last name (first 4 letters)', nhint:'Letters will be capitalised automatically', s2btn:'Submit',
     tytitle:'Thank you!',
-    tip1:'You may continue using our bathrobes and towels — please return them at the front desk.',
-    tip2:'You can use a locker with your green key in the changing room.',
+    tysub:'Thank you for letting us know. You can now enjoy the Therme.',
+    il1:'Towels & Bathrobes', it1:'You may continue using your towels, bathrobe and wristband throughout the day. Please return everything at the front desk at the end of your visit.',
+    il2:'Luggage', it2:'If you have luggage, you are welcome to leave it with our colleagues to the right of the front desk.',
+    il3:'Lockers in the changing rooms', it3:'The lockers with the hotel logo can be locked using your green wristband.',
+    il4:'Check-out', it4:'After your visit to the Therme, please return to the front desk to hand in your towels and bathrobe and complete your final check-out. The front desk is open around the clock.',
     smilabel:'How was your stay? (optional)',
     smihint:'Tap an emoji — or skip this step',
     farewell:'Have a wonderful day at the Therme —<br>see you later at the front desk!',
@@ -331,9 +362,12 @@ function setLang(l){
   s('t-confirm',t.confirm);
   s('t-s2title',t.s2title); s('t-s2body',t.s2body);
   s('t-nlabel',t.nlabel); s('t-nhint',t.nhint);
-  s('t-tytitle',t.tytitle); s('t-tip1',t.tip1); s('t-tip2',t.tip2);
+  s('t-tytitle',t.tytitle); s('t-tysub',t.tysub);
+  s('t-il1',t.il1); s('t-it1',t.it1);
+  s('t-il2',t.il2); s('t-it2',t.it2);
+  s('t-il3',t.il3); s('t-it3',t.it3);
+  s('t-il4',t.il4); s('t-it4',t.it4);
   s('t-smilabel',t.smilabel); s('t-smihint',t.smihint);
-  h('t-farewell',t.farewell);
   s('t-rst',t.rst); s('t-rst2',t.rst);
   s('t-cotitle',t.cotitle); s('t-cos1',t.cos1); s('t-cos2',t.cos2); s('t-cos3',t.cos3);
   s('t-cofare',t.cofare);
@@ -411,7 +445,7 @@ async function updateSmiley(id,score){
   try{
     await fetch(PA_UPDATE_URL,{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({id:id,smiley:score})
+      body:JSON.stringify({id:id,smiley:String(score)})
     });
   }catch(e){console.warn('Smiley-Update fehlgeschlagen:',e);}
 }
