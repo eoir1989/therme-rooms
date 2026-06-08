@@ -218,6 +218,17 @@ html,body{height:100%;overflow:hidden}
           oninput="ni()" placeholder="_ _ _ _">
         <p class="nhint" id="t-nhint">Großbuchstaben werden automatisch gesetzt</p>
       </div>
+      <div class="card">
+        <div class="clabel" id="t-smilabel">Wie war Ihr Aufenthalt? (optional)</div>
+        <div class="smiley-row">
+          <button class="sm" id="sm1" onclick="setSmiley(1)">😞</button>
+          <button class="sm" id="sm2" onclick="setSmiley(2)">😕</button>
+          <button class="sm" id="sm3" onclick="setSmiley(3)">😐</button>
+          <button class="sm" id="sm4" onclick="setSmiley(4)">🙂</button>
+          <button class="sm" id="sm5" onclick="setSmiley(5)">😄</button>
+        </div>
+        <p class="smiley-hint" id="t-smihint">Tippen Sie auf ein Emoji — oder überspringen Sie diesen Schritt</p>
+      </div>
       <button class="sbtn white" id="btn2" onclick="submitS2()" disabled>Absenden</button>
     </div>
 
@@ -247,17 +258,6 @@ html,body{height:100%;overflow:hidden}
           </div>
         </div>
 
-        <div class="divider">
-          <div class="clabel" id="t-smilabel">Wie war Ihr Aufenthalt? (optional)</div>
-          <div class="smiley-row">
-            <button class="sm" id="sm1" onclick="setSmiley(1)">😞</button>
-            <button class="sm" id="sm2" onclick="setSmiley(2)">😕</button>
-            <button class="sm" id="sm3" onclick="setSmiley(3)">😐</button>
-            <button class="sm" id="sm4" onclick="setSmiley(4)">🙂</button>
-            <button class="sm" id="sm5" onclick="setSmiley(5)">😄</button>
-          </div>
-          <p class="smiley-hint" id="t-smihint">Tippen Sie auf ein Emoji — oder überspringen Sie diesen Schritt</p>
-        </div>
       </div>
       <div class="timeout-wrap">
         <button class="timeout-btn" id="timeout-btn-therme" onclick="doReset()">
@@ -291,10 +291,11 @@ html,body{height:100%;overflow:hidden}
 </div>
 
 <script>
-var PA_POST_URL   = 'https://defaultf76bf23d7f7f41f18c96cf2f261a1d.bf.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/253d517c45a0405c8e8d85962207f9ac/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jdPtffKrLYsDcq9-mgvpb-wCj0ALxVzp9txNc4j3Bsc';
+var PA_POST_URL = 'https://defaultf76bf23d7f7f41f18c96cf2f261a1d.bf.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/253d517c45a0405c8e8d85962207f9ac/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jdPtffKrLYsDcq9-mgvpb-wCj0ALxVzp9txNc4j3Bsc';
+// PA_UPDATE_URL sigue siendo necesario para Umgezogen desde Victory Kompass
 var PA_UPDATE_URL = 'https://defaultf76bf23d7f7f41f18c96cf2f261a1d.bf.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a4cdea7339fc4ddf9b96ea44ad744eaa/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BMnhn6gfKFqF8IxMkCRJyaYNUjKycyNvC-ibB3tPXIE';
 
-var L='de', room='', choice=null, confirmed=false, smiley=0, lastId=null, fillInterval=null;
+var L='de', room='', choice=null, confirmed=false, smiley=0, fillInterval=null;
 
 var TX={
   de:{
@@ -410,20 +411,20 @@ function ni(){
 
 async function submitS2(){
   var name=document.getElementById('ninput').value;
-  smiley=0;
-  for(var i=1;i<=5;i++)document.getElementById('sm'+i).className='sm';
   showScreen(3);
   startTimeout('therme');
-  lastId=await saveToExcel(room,name);
+  await saveToExcel(room, name, smiley);
+  // Reset smiley für nächsten Vorgang
+  smiley=0;
+  for(var i=1;i<=5;i++)document.getElementById('sm'+i).className='sm';
 }
 
 function setSmiley(n){
   smiley=n;
   for(var i=1;i<=5;i++)document.getElementById('sm'+i).className='sm'+(i===n?' sel':'');
-  if(lastId)updateSmiley(lastId,n);
 }
 
-async function saveToExcel(zimmer,nachname){
+async function saveToExcel(zimmer,nachname,smileyScore){
   var now=new Date();
   var id=Math.random().toString(36).substring(2,10).toUpperCase();
   try{
@@ -434,20 +435,10 @@ async function saveToExcel(zimmer,nachname){
         zeitstempel:now.toLocaleString('de-DE'),
         datum:now.toLocaleDateString('de-DE'),
         uhrzeit:now.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}),
-        zimmer:zimmer,nachname:nachname,smiley:'',umgezogen:'false'
+        zimmer:zimmer,nachname:nachname,smiley:smileyScore||'',umgezogen:'false'
       })
     });
   }catch(e){console.warn('Speicherung fehlgeschlagen:',e);}
-  return id;
-}
-
-async function updateSmiley(id,score){
-  try{
-    await fetch(PA_UPDATE_URL,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({id:id,smiley:String(score)})
-    });
-  }catch(e){console.warn('Smiley-Update fehlgeschlagen:',e);}
 }
 
 var TIMEOUT_SEC=60;
@@ -472,7 +463,7 @@ function clearTimeouts(){
 
 function doReset(){
   clearTimeouts();
-  room='';choice=null;confirmed=false;smiley=0;lastId=null;
+  room='';choice=null;confirmed=false;smiley=0;
   document.getElementById('ninput').value='';
   document.getElementById('btn1').disabled=true;
   document.getElementById('btn2').disabled=true;
