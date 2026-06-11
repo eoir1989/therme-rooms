@@ -840,31 +840,39 @@
             const t = currentLanguage === 'EN' ? textsEN : textsDE;
             const entry = confirmedDays[index];
 
+            // Disable button immediately to prevent double clicks
+            const btn = document.getElementById(`btnUsed_${index}`);
+            btn.disabled = true;
+            btn.textContent = '...';
+
+            // If no ID yet, fetch from Excel first
             if (!entry.id) {
-                // No ID yet, fetch from Excel and retry once
                 await new Promise(r => setTimeout(r, 800));
                 await refreshIds();
-                if (!confirmedDays[index]?.id) return;
-                return await markAsUsed(index);
+                if (!confirmedDays[index]?.id) {
+                    // Still no ID, restore button
+                    btn.disabled = false;
+                    btn.textContent = t.btnUsed;
+                    return;
+                }
             }
 
             try {
                 await fetch(PA_UPDATE_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: entry.id, verwendet: 'true' })
+                    body: JSON.stringify({ id: confirmedDays[index].id, verwendet: 'true' })
                 });
 
                 confirmedDays[index].verwendet = 'true';
-
                 const voucher = document.getElementById(`voucher_${index}`);
                 voucher.classList.add('used');
-                const btn = document.getElementById(`btnUsed_${index}`);
                 btn.textContent = t.btnAlreadyUsed;
                 btn.classList.add('is-used');
-                btn.disabled = true;
             } catch (error) {
                 console.error(error);
+                btn.disabled = false;
+                btn.textContent = t.btnUsed;
                 alert(t.error);
             }
         }
