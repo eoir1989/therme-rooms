@@ -395,7 +395,7 @@
         <!-- CHECKOUT DATE SCREEN -->
         <div class="checkout-area" id="checkoutArea">
             <div class="checkout-info" id="checkoutInfo">
-                Bitte geben Sie Ihr Abreisedatum ein, um zu prüfen, ob Sie die Zimmerreinigung abbestellen können.
+                Bitte geben Sie Ihr Abreisedatum ein. Wenn Sie für heute auf die Zimmerreinigung verzichten möchten, wenden Sie sich bitte direkt an unseren Empfang.
             </div>
             <div class="form-group">
                 <label id="checkoutLabel">Abreisedatum</label>
@@ -479,12 +479,12 @@
 
         const textsDE = {
             roomLabel: 'Zimmer', mainTitle: 'Reinigung abbestellen', mainSubtitle: 'Getränk genießen',
-            checkoutInfo: 'Bitte geben Sie Ihr Abreisedatum ein, um zu prüfen, ob Sie die Zimmerreinigung abbestellen können.',
+            checkoutInfo: 'Bitte geben Sie Ihr Abreisedatum ein. Wenn Sie für heute auf die Zimmerreinigung verzichten möchten, wenden Sie sich bitte direkt an unseren Empfang.',
             checkoutLabel: 'Abreisedatum',
+            todayNote: '',
             checkoutBtn: 'Weiter',
-            checkoutWarning: 'Bitte geben Sie Ihr korrektes Abreisedatum an. Bei falschen Angaben behalten wir uns vor, das Freigetränk in Rechnung zu stellen.',
+            checkoutWarning: 'Bitte überprüfen Sie Ihr Abreisedatum kurz – so stellen wir sicher, dass Ihr Getränkegutschein gültig ist.',
             notPossible: '⚠️ Da Sie morgen abreisen, ist es leider nicht möglich, die Zimmerreinigung abzubestellen. Wir wünschen Ihnen eine gute Reise!',
-            toEarly: '⏰ Es ist noch vor 11:00 Uhr. Bitte wenden Sie sich für Änderungen an heute an die Rezeption.',
             introText: 'Verzichten Sie auf die Zimmerreinigung und leisten Sie gemeinsam mit uns einen kleinen Beitrag zum Umweltschutz. Als Dankeschön laden wir Sie auf ein Getränk in unsere Hotelbar ein.',
             benefitsTitle: 'Vorteile',
             benefit1: 'Schonender Umgang mit Wasser, Energie und Reinigungsmitteln',
@@ -514,12 +514,12 @@
 
         const textsEN = {
             roomLabel: 'Room', mainTitle: 'Cancel room cleaning', mainSubtitle: 'Enjoy a drink',
-            checkoutInfo: 'Please enter your check-out date to see if you can cancel room cleaning.',
+            checkoutInfo: 'Please enter your departure date. If you would like to skip room cleaning for today, please contact our front desk directly.',
             checkoutLabel: 'Check-out date',
+            todayNote: '',
             checkoutBtn: 'Continue',
-            checkoutWarning: 'Please enter your correct check-out date. Incorrect information may result in the complimentary drink being charged to your room.',
+            checkoutWarning: 'Please double-check your departure date — this helps us make sure your complimentary drink voucher is valid.',
             notPossible: '⚠️ Since you are checking out tomorrow, it is unfortunately not possible to cancel room cleaning. We wish you a pleasant journey!',
-            toEarly: '⏰ It is before 11:00 AM. For changes affecting today, please contact reception.',
             introText: 'Skip room cleaning and help us make a small contribution to protecting the environment. As a thank you, we\'d like to treat you to a drink at our hotel bar.',
             benefitsTitle: 'Benefits',
             benefit1: 'Careful use of water, energy and cleaning products',
@@ -669,15 +669,6 @@
 
             if (!checkoutInput) {
                 alert(t.selectDate);
-                return;
-            }
-
-            // Check if before 11:00 AM
-            const now = new Date();
-            if (now.getHours() < 11) {
-                document.getElementById('notPossible').textContent = t.toEarly;
-                document.getElementById('notPossible').style.display = 'block';
-                document.getElementById('checkoutBtn').style.display = 'none';
                 return;
             }
 
