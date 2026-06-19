@@ -395,7 +395,7 @@
         <!-- CHECKOUT DATE SCREEN -->
         <div class="checkout-area" id="checkoutArea">
             <div class="checkout-info" id="checkoutInfo">
-                Bestellen Sie die Reinigung für die Folgetage ab und erhalten Sie pro Tag einen Gratis-Drink an der Bar! Möchten Sie die Reinigung für heute abbestellen? Unser Empfang hilft Ihnen gerne weiter.
+                Bitte geben Sie Ihr Abreisedatum ein. Wenn Sie für heute auf die Zimmerreinigung verzichten möchten, wenden Sie sich bitte direkt an unseren Empfang.
             </div>
             <div class="form-group">
                 <label id="checkoutLabel">Abreisedatum</label>
@@ -479,7 +479,7 @@
 
         const textsDE = {
             roomLabel: 'Zimmer', mainTitle: 'Reinigung abbestellen', mainSubtitle: 'Getränk genießen',
-            checkoutInfo: 'Bestellen Sie die Reinigung für die Folgetage ab und erhalten Sie pro Tag einen Gratis-Drink an der Bar! Möchten Sie die Reinigung für heute abbestellen? Unser Empfang hilft Ihnen gerne weiter.',
+            checkoutInfo: 'Bestellen Sie die Reinigung für die Folgetage ab und erhalten Sie pro Tag einen Gratis-Drink an der Bar!<br>Möchten Sie die Reinigung für heute abbestellen? Unser Empfang hilft Ihnen gerne weiter.',
             checkoutLabel: 'Abreisedatum',
             todayNote: '',
             checkoutBtn: 'Weiter',
@@ -499,8 +499,9 @@
             voucherTitle: 'Getränkegutschein',
             voucherSubtitle: 'Hotel Victory Therme Erding',
             voucherBar: 'Kaleidoskop Bar · Lobby',
+            voucherBarHours: 'Geöffnet ab 18:00 Uhr',
             roomLabelVoucher: 'Zimmer', validLabelVoucher: 'Gültig am',
-            chooseDrinkVoucher: 'Wählen Sie Ihr Freigetränk:',
+            chooseDrinkVoucher: 'Holen Sie sich Ihr Getränk an unserer Kaleidoskop Bar',
             voucherFooter: 'Gutschein gültig für einen Tag. Keine Barauszahlung.',
             thankYouText: 'Vielen Dank!',
             voucherInstruction: 'Zeigen Sie diesen Gutschein an unserer Bar vor, um Ihr Freigetränk zu erhalten.',
@@ -514,7 +515,7 @@
 
         const textsEN = {
             roomLabel: 'Room', mainTitle: 'Cancel room cleaning', mainSubtitle: 'Enjoy a drink',
-            checkoutInfo: 'Skip housekeeping service and receive one complimentary drink at the bar for each day! Would you like to cancel housekeeping for today? Our reception team will be happy to assist you.',
+            checkoutInfo: 'Cancel housekeeping for the following days and receive a complimentary drink at the bar each day!<br>Would you like to cancel cleaning for today? Our front desk team will be happy to help.',
             checkoutLabel: 'Check-out date',
             todayNote: '',
             checkoutBtn: 'Continue',
@@ -534,8 +535,9 @@
             voucherTitle: 'Drink Voucher',
             voucherSubtitle: 'Hotel Victory Therme Erding',
             voucherBar: 'Kaleidoskop Bar · Lobby',
+            voucherBarHours: 'Open starting at 18:00',
             roomLabelVoucher: 'Room', validLabelVoucher: 'Valid on',
-            chooseDrinkVoucher: 'Choose your free drink:',
+            chooseDrinkVoucher: 'Pick up your drink from our Kaleidoskop Bar',
             voucherFooter: 'Voucher valid for one day. No cash redemption.',
             thankYouText: 'Thank you!',
             voucherInstruction: 'Present this voucher at our bar to receive your free drink.',
@@ -553,7 +555,7 @@
             document.getElementById('roomLabel').innerHTML = `${t.roomLabel} <strong>${ROOM}</strong>`;
             document.getElementById('mainTitle').textContent = t.mainTitle;
             document.getElementById('mainSubtitle').textContent = t.mainSubtitle;
-            document.getElementById('checkoutInfo').textContent = t.checkoutInfo;
+            document.getElementById('checkoutInfo').innerHTML = t.checkoutInfo;
             document.getElementById('checkoutLabel').textContent = t.checkoutLabel;
             document.getElementById('checkoutBtn').textContent = t.checkoutBtn;
             document.getElementById('checkoutWarning').textContent = t.checkoutWarning;
@@ -787,12 +789,7 @@
                     </div>
                     <div class="voucher-drinks">
                         <div class="voucher-drinks-title">${t.chooseDrinkVoucher}</div>
-                        <div style="font-size:11px;color:#8b6f47;margin-bottom:8px;">📍 ${t.voucherBar}</div>
-                        <div class="drinks-options">
-                            <div class="drink-option">🍺 ${t.drink1}</div>
-                            <div class="drink-option">🍷 ${t.drink2}</div>
-                            <div class="drink-option">🥤 ${t.drink3}</div>
-                        </div>
+                        <div style="font-size:12px;color:#8b6f47;">${t.voucherBarHours}</div>
                     </div>
                     <div class="voucher-footer">${t.voucherFooter}</div>
                     <button class="${btnClass}" id="btnUsed_${i}" onclick="markAsUsed(${i})" ${isUsed ? 'disabled' : ''}>
